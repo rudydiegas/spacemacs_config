@@ -32,7 +32,7 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(yaml
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -48,15 +48,16 @@ This function should only modify configuration layer settings."
      ;; markdown
      multiple-cursors
      org
-     (shell :variables
-            shell-default-height 30
-            shell-default-position 'bottom)
+     ;; (shell :variables
+     ;;        shell-default-height 30
+     ;;        shell-default-position 'bottom)
      ;; spell-checking
      syntax-checking
      version-control
      treemacs
      python
      haskell
+     c-c++
      themes-megapack
      )
 
@@ -72,8 +73,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages
    '(
      tron-legacy-theme
-     verilog-mode
-     smudge
+     vterm
      )
 
    ;; A list of packages that cannot be updated.
@@ -247,8 +247,11 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light)
+   dotspacemacs-themes '(fogus
+                         tron-legacy
+                         odersky
+                         wilson)
+   ;;tron-legacy
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -269,7 +272,7 @@ It should only modify the values of Spacemacs settings."
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 10.0
+                               :size 12.0
                                :weight normal
                                :width normal)
 
@@ -592,29 +595,9 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
   :config
-  (setq smudge-oauth2-client-id "37a468f9a65746b296d601f04c6006c1")
-  (setq smudge-oauth2-client-secret "62b14282be854898931fbadf010e2a60")
-
-  (spacemacs/set-leader-keys "." smudge-command-map)
-
   (blink-cursor-mode)
-
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection '("svls"))
-                    :major-modes '(verilog-mode)
-                    :priority -1
-                    ))
-
-
-  (setq tron-legacy-theme-vivid-cursor t)
-  (setq tron-legacy-theme-dark-fg-bright-comments nil)
-  (setq tron-legacy-theme-softer-bg nil)
-  (load-theme 'tron-legacy t)
-
-  (add-hook 'verilog-mode (lambda()
-                            (lsp)
-                            (flycheck-mode t)
-                            (add-to-list 'lsp-language-id-configuration '(verilog-mode . "verilog"))))
+  (setq lsp-ui-peek-always-show t)
+  (setq lsp-haskell-plugin-stan-global-on :json-false)
   )
 
 
@@ -630,11 +613,10 @@ This function is called at the very end of Spacemacs initialization."
    ;; If you edit it by hand, you could mess it up, so be careful.
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
-   '(custom-enabled-themes '(tron-legacy))
    '(custom-safe-themes
      '("02d422e5b99f54bd4516d4157060b874d14552fe613ea7047c4a5cfa1288cf4f" "7ec8fd456c0c117c99e3a3b16aaf09ed3fb91879f6601b1ea0eeaee9c6def5d9" "8b148cf8154d34917dfc794b5d0fe65f21e9155977a36a5985f89c09a9669aa0" "4ade6b630ba8cbab10703b27fd05bb43aaf8a3e5ba8c2dc1ea4a2de5f8d45882" "d6b934330450d9de1112cbb7617eaf929244d192c4ffb1b9e6b63ad574784aad" "7fd8b914e340283c189980cd1883dbdef67080ad1a3a9cc3df864ca53bdc89cf" "a1c18db2838b593fba371cb2623abd8f7644a7811ac53c6530eebdf8b9a25a8d" "f13fa8e962b2ad938955650c449a8447769fc617f5d914552bff6b2ea7fec0bd" "ce784eb8135893a19e5553ed94cc694320b05228ce712a64b2fb69c0c54161b9" "821c37a78c8ddf7d0e70f0a7ca44d96255da54e613aa82ff861fe5942d3f1efc" "c48551a5fb7b9fc019bf3f61ebf14cf7c9cdca79bcb2a4219195371c02268f11" "987b709680284a5858d5fe7e4e428463a20dfabe0a6f2a6146b3b8c7c529f08b" "e0d42a58c84161a0744ceab595370cbe290949968ab62273aed6212df0ea94b4" "3cd28471e80be3bd2657ca3f03fbb2884ab669662271794360866ab60b6cb6e6" "3cc2385c39257fed66238921602d8104d8fd6266ad88a006d0a4325336f5ee02" "e9776d12e4ccb722a2a732c6e80423331bcb93f02e089ba2a4b02e85de1cf00e" "72a81c54c97b9e5efcc3ea214382615649ebb539cb4f2fe3a46cd12af72c7607" "58c6711a3b568437bab07a30385d34aacf64156cc5137ea20e799984f4227265" "3d5ef3d7ed58c9ad321f05360ad8a6b24585b9c49abcee67bdcbb0fe583a6950" "b3775ba758e7d31f3bb849e7c9e48ff60929a792961a2d536edec8f68c671ca5" "9b59e147dbbde5e638ea1cde5ec0a358d5f269d27bd2b893a0947c4a867e14c1" "96998f6f11ef9f551b427b8853d947a7857ea5a578c75aa9c4e7c73fe04d10b4" "4c7228157ba3a48c288ad8ef83c490b94cb29ef01236205e360c2c4db200bb18" default))
    '(package-selected-packages
-     '(smudge oauth2 simple-httpd counsel-projectile counsel counsel-spotify ivy-avy ivy-hydra ivy-purpose ivy-xref ivy-yasnippet lsp-ivy smex spotify swiper ivy wgrep xah-fly-keys afternoon-theme alect-themes ample-theme ample-zen-theme anti-zenburn-theme apropospriate-theme badwolf-theme birds-of-paradise-plus-theme bubbleberry-theme busybee-theme cherry-blossom-theme chocolate-theme clues-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow dakrone-theme darkmine-theme darkokai-theme darktooth-theme django-theme doom-themes dracula-theme ef-themes espresso-theme exotica-theme eziam-themes farmhouse-themes flatland-theme flatui-theme gandalf-theme gotham-theme grandshell-theme gruber-darker-theme gruvbox-theme hc-zenburn-theme hemisu-theme heroku-theme inkpot-theme ir-black-theme jazz-theme jbeans-theme kaolin-themes light-soap-theme lush-theme madhat2r-theme majapahit-themes material-theme minimal-theme modus-themes moe-theme molokai-theme monochrome-theme monokai-theme mustang-theme naquadah-theme noctilux-theme obsidian-theme occidental-theme oldlace-theme omtose-phellack-theme organic-green-theme phoenix-dark-mono-theme phoenix-dark-pink-theme planet-theme professional-theme purple-haze-theme railscasts-theme rebecca-theme reverse-theme seti-theme smyx-theme soft-charcoal-theme soft-morning-theme soft-stone-theme solarized-theme soothe-theme autothemer spacegray-theme subatomic-theme subatomic256-theme sunny-day-theme tango-2-theme tango-plus-theme tangotango-theme tao-theme toxi-theme twilight-anti-bright-theme twilight-bright-theme twilight-theme ujelly-theme underwater-theme white-sand-theme zen-and-art-theme zenburn-theme zonokai-emacs eat esh-help eshell-prompt-extras eshell-z evil-org gnuplot helm-org-rifle htmlize multi-term multi-vterm org-cliplink org-contrib org-download org-mime org-pomodoro alert log4e gntp org-present org-projectile org-project-capture org-category-capture org-rich-yank orgit-forge orgit shell-pop terminal-here vterm dap-mode lsp-docker bui tron-legacy-theme cyberpunk-2019-theme cybercafe-theme cyberpunk-theme sublime-themes theme-magic nord-theme attrap auto-yasnippet blacken browse-at-remote cmm-mode code-cells company-anaconda anaconda-mode company-cabal cython-mode dante lcr eldoc xref diff-hl flycheck-haskell flycheck-pos-tip pos-tip forge yaml ghub closql emacsql treepy git-link git-messenger git-modes git-timemachine gitignore-templates haskell-snippets helm-c-yasnippet helm-company company helm-git-grep helm-hoogle helm-ls-git helm-lsp helm-pydoc hindent hlint-refactor importmagic epc ctable concurrent deferred live-py-mode lsp-haskell haskell-mode lsp-origami origami lsp-pyright lsp-treemacs lsp-ui lsp-mode markdown-mode mwim nose pip-requirements pipenv load-env-vars pippel poetry py-isort pydoc pyenv-mode pythonic pylookup pytest pyvenv smeargle sphinx-doc treemacs-magit magit magit-section git-commit with-editor transient unfill yapfify yasnippet-snippets yasnippet ws-butler writeroom-mode winum which-key volatile-highlights vim-powerline vi-tilde-fringe uuidgen undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil toc-org term-cursor symon symbol-overlay string-inflection string-edit-at-point spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline space-doc restart-emacs request rainbow-delimiters quickrun popwin pcre2el password-generator paradox overseer org-superstar open-junk-file nameless multi-line macrostep lorem-ipsum link-hint inspector info+ indent-guide hybrid-mode hungry-delete holy-mode hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-descbinds helm-comint helm-ag google-translate golden-ratio flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav elisp-demos elisp-def editorconfig dumb-jump drag-stuff dotenv-mode dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile all-the-icons aggressive-indent ace-link ace-jump-helm-line)))
+     '(ccls company-c-headers company-rtags company-ycmd cpp-auto-include disaster flycheck-rtags flycheck-ycmd gendoxy google-c-style ivy-rtags rtags ycmd request-deferred yaml-mode smudge oauth2 simple-httpd counsel-projectile counsel counsel-spotify ivy-avy ivy-hydra ivy-purpose ivy-xref ivy-yasnippet lsp-ivy smex spotify swiper ivy wgrep xah-fly-keys afternoon-theme alect-themes ample-theme ample-zen-theme anti-zenburn-theme apropospriate-theme badwolf-theme birds-of-paradise-plus-theme bubbleberry-theme busybee-theme cherry-blossom-theme chocolate-theme clues-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow dakrone-theme darkmine-theme darkokai-theme darktooth-theme django-theme doom-themes dracula-theme ef-themes espresso-theme exotica-theme eziam-themes farmhouse-themes flatland-theme flatui-theme gandalf-theme gotham-theme grandshell-theme gruber-darker-theme gruvbox-theme hc-zenburn-theme hemisu-theme heroku-theme inkpot-theme ir-black-theme jazz-theme jbeans-theme kaolin-themes light-soap-theme lush-theme madhat2r-theme majapahit-themes material-theme minimal-theme modus-themes moe-theme molokai-theme monochrome-theme monokai-theme mustang-theme naquadah-theme noctilux-theme obsidian-theme occidental-theme oldlace-theme omtose-phellack-theme organic-green-theme phoenix-dark-mono-theme phoenix-dark-pink-theme planet-theme professional-theme purple-haze-theme railscasts-theme rebecca-theme reverse-theme seti-theme smyx-theme soft-charcoal-theme soft-morning-theme soft-stone-theme solarized-theme soothe-theme autothemer spacegray-theme subatomic-theme subatomic256-theme sunny-day-theme tango-2-theme tango-plus-theme tangotango-theme tao-theme toxi-theme twilight-anti-bright-theme twilight-bright-theme twilight-theme ujelly-theme underwater-theme white-sand-theme zen-and-art-theme zenburn-theme zonokai-emacs eat esh-help eshell-prompt-extras eshell-z evil-org gnuplot helm-org-rifle htmlize multi-term multi-vterm org-cliplink org-contrib org-download org-mime org-pomodoro alert log4e gntp org-present org-projectile org-project-capture org-category-capture org-rich-yank orgit-forge orgit shell-pop terminal-here vterm dap-mode lsp-docker bui tron-legacy-theme cyberpunk-2019-theme cybercafe-theme cyberpunk-theme sublime-themes theme-magic nord-theme attrap auto-yasnippet blacken browse-at-remote cmm-mode code-cells company-anaconda anaconda-mode company-cabal cython-mode dante lcr eldoc xref diff-hl flycheck-haskell flycheck-pos-tip pos-tip forge yaml ghub closql emacsql treepy git-link git-messenger git-modes git-timemachine gitignore-templates haskell-snippets helm-c-yasnippet helm-company company helm-git-grep helm-hoogle helm-ls-git helm-lsp helm-pydoc hindent hlint-refactor importmagic epc ctable concurrent deferred live-py-mode lsp-haskell haskell-mode lsp-origami origami lsp-pyright lsp-treemacs lsp-ui lsp-mode markdown-mode mwim nose pip-requirements pipenv load-env-vars pippel poetry py-isort pydoc pyenv-mode pythonic pylookup pytest pyvenv smeargle sphinx-doc treemacs-magit magit magit-section git-commit with-editor transient unfill yapfify yasnippet-snippets yasnippet ws-butler writeroom-mode winum which-key volatile-highlights vim-powerline vi-tilde-fringe uuidgen undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil toc-org term-cursor symon symbol-overlay string-inflection string-edit-at-point spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline space-doc restart-emacs request rainbow-delimiters quickrun popwin pcre2el password-generator paradox overseer org-superstar open-junk-file nameless multi-line macrostep lorem-ipsum link-hint inspector info+ indent-guide hybrid-mode hungry-delete holy-mode hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-descbinds helm-comint helm-ag google-translate golden-ratio flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav elisp-demos elisp-def editorconfig dumb-jump drag-stuff dotenv-mode dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile all-the-icons aggressive-indent ace-link ace-jump-helm-line)))
   (custom-set-faces
    ;; custom-set-faces was added by Custom.
    ;; If you edit it by hand, you could mess it up, so be careful.
